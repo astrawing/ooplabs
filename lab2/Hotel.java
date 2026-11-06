@@ -132,10 +132,10 @@ public final class Hotel {
         }
 
         public Hotel build() {
-            if (name == null)     throw new IllegalStateException("Не задано name");
-            if (location == null) throw new IllegalStateException("Не задано location");
-            if (stars == null)    throw new IllegalStateException("Не задано stars");
-            if (floors == null)   throw new IllegalStateException("Не задано floors");
+            if (name == null)     throw new IllegalStateException("Не задан атрибут name");
+            if (location == null) throw new IllegalStateException("Не задан атрибут location");
+            if (stars == null)    throw new IllegalStateException("Не задан атрибут stars");
+            if (floors == null)   throw new IllegalStateException("Не задан атрибут floors");
 
             List<Room> rooms_c = new ArrayList<>(rooms.size());
             for (Room r : rooms) {

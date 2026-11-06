@@ -17,7 +17,8 @@ public class Main {
         budget.findRoomByNumber(101).orElseThrow().checkIn();
         budget.findRoomByNumber(202).orElseThrow().checkIn();
         budget.findRoomByNumber(301).orElseThrow().checkIn();
-        System.out.println("Свободно мест: " + budget.getAvailableCapacity());
+        System.out.println();
+        budget.printInfo();
 
         System.out.println("\nПопытка заселиться в уже занятый номер 202:");
         budget.findRoomByNumber(202).orElseThrow().checkIn();
