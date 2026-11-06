@@ -30,6 +30,10 @@ public class Room {
         this.occupied = false;
     }
 
+    public Room copy() {
+        return new Room(roomNumber, floor, capacity, area, basePrice);
+    }
+
     public int getRoomNumber() { return roomNumber; }
     public int getFloor() { return floor; }
     public int getCapacity() { return capacity; }

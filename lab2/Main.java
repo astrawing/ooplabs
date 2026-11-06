@@ -1,62 +1,76 @@
 public class Main {
     public static void main(String[] args) {
-        Hotel luxury = new HotelBuilder()
-                .name("Grand Palace")
-                .location("Москва")
-                .stars(5)
-                .floors(5)
-                .addLuxRoom(1, 1).addLuxRoom(2, 1)
-                .addStandardRoom(3, 1)
-                .addLuxRoom(4, 1).addLuxRoom(5, 1)
-                .addStandardRoom(6, 1)
-                .build();
+        HotelDirector director = new HotelDirector();
+
+        Hotel luxury = director.buildLuxuryHotel("Grand Palace", "Москва", 2, 3);
         luxury.printInfo();
 
-        System.out.println("\nПоиск комнаты 3:");
-        Room r = luxury.findRoomByNumber(3).orElseThrow();
-        System.out.println(r.describe());
+        System.out.println();
+        Hotel boutique = director.buildBoutiqueHotel("Лофт", "Санкт-Петербург", 3, 2);
+        boutique.printInfo();
 
         System.out.println();
-
-        Hotel budget = new HotelBuilder()
-                .name("Уют")
-                .location("Казань")
-                .stars(2)
-                .floors(3)
-                .addStandardRoom(101, 1).addStandardRoom(102, 1).addStandardRoom(103, 1)
-                .addStandardRoom(201, 2).addStandardRoom(202, 2).addStandardRoom(203, 2)
-                .addStandardRoom(301, 3).addStandardRoom(302, 3).addStandardRoom(303, 3)
-                .build();
+        Hotel budget = director.buildBudgetHotel("Уют", "Казань", 3, 3);
         budget.printInfo();
 
-        System.out.println("");
-
-        System.out.println("=== Заселение в номера 101, 202, 301 ===");
+        System.out.println("\nДемонстрация функционала заселения:");
         budget.findRoomByNumber(101).orElseThrow().checkIn();
         budget.findRoomByNumber(202).orElseThrow().checkIn();
         budget.findRoomByNumber(301).orElseThrow().checkIn();
-        budget.printInfo();
+        System.out.println("Свободно мест: " + budget.getAvailableCapacity());
 
-        System.out.println("");
+        System.out.println("\nПопытка заселиться в уже занятый номер 202:");
         budget.findRoomByNumber(202).orElseThrow().checkIn();
-        
+
+        System.out.println();
+
+        Hotel custom = new Hotel.Builder()
+                .name("LilBlue").location("Сочи").stars(3).floors(2)
+                .addStandardRoom(101, 1)
+                .addStandardRoom(102, 1)
+                .addRoom(201, 2, RoomType.LUX)
+                .build();
+        custom.printInfo();
+
         try {
-            new HotelBuilder()
+            new Hotel.Builder()
                     .name("X").location("Y").stars(2).floors(2)
                     .addStandardRoom(101, 1)
-                    .addStandardRoom(101, 1)  
+                    .addStandardRoom(101, 1)
                     .build();
         } catch (IllegalArgumentException e) {
-            System.out.println("\n[Дубликат номера] " + e.getMessage());
+            System.out.println("\n" + e.getMessage());
         }
 
         try {
-            new HotelBuilder()
+            new Hotel.Builder()
                     .name("X").location("Y").stars(2).floors(2)
-                    .addStandardRoom(501, 5)   
+                    .addStandardRoom(501, 5)
                     .build();
         } catch (IllegalArgumentException e) {
-            System.out.println("[Ошибка этажа] " + e.getMessage());
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            new Hotel.Builder()
+                    .name("X").location("Y").stars(2)
+                    .addStandardRoom(501, 5)
+                    .floors(2)
+                    .build();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            new Hotel.Builder().name("X").location("Y").stars(2).build();
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            director.buildBudgetHotel("X", "Y", 0, 5);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 }
